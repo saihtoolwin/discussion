@@ -74,8 +74,11 @@ class QuestionLikeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,QuestionLike $questionLike)
     {
-        //
+        $like = QuestionLike::where('question_id', $id)->where('user_id',Auth::id())->first();
+        // dd($id);
+        $like->delete();
+        return back();
     }
 }

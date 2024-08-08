@@ -1,4 +1,4 @@
-<template>
+<template >
     <!-- Navbar -->
     <Navbar></Navbar>
     <!--  Navbar end -->
@@ -10,7 +10,7 @@
         <!-- Side bar end -->
 
          <!-- Content -->
-        <div class="w-full min-h-[auto] ml-8 rounded overflow-hidden shadow-lg">
+        <div class="w-full min-h-[auto] ml-8 overflow-hidden  rounded-md">
             <slot></slot>
         </div>
         <!-- Content end -->

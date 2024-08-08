@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuestionLikeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -16,15 +17,19 @@ use Inertia\Inertia;
 //     ]);
 // });
 
-Route::resource('/', HomeController::class)->middleware(['auth', 'verified']);
-
+Route::resource('home', HomeController::class)->middleware(['auth', 'verified']);
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home.index')
+    ->middleware(['auth', 'verified']);
 Route::middleware('auth')->group(function () {
     // Route::resource('/question/like/{id}',QuestionLikeController::class);
     Route::resource('/question/like', QuestionLikeController::class);
 
+    // question
+    Route::get('/question/detail/{slug}',[QuestionController::class,'index'])->name('question.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

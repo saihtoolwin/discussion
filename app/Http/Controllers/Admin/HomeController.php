@@ -8,9 +8,10 @@ use App\Models\QuestionLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
+use App\Traits\Question as QuestionTraits;
 class HomeController extends Controller
 {
+    use QuestionTraits;
     /**
      * Display a listing of the resource.
      */
@@ -18,7 +19,7 @@ class HomeController extends Controller
     {
         $questions = Question::with('user', 'comment', 'like', 'questionSave', 'tag')->get();
         foreach ($questions as $question) {
-            $likeDetails = $this->likeDetails($question->id);
+            $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
         }
@@ -77,22 +78,5 @@ class HomeController extends Controller
         //
     }
 
-    public function likeDetails($question_id)
-    {
-        $q_like = QuestionLike::where('question_id', $question_id)
-            ->where('user_id', Auth::user()->id)->first();
-
-        if ($q_like) {
-            $is_like = "true";
-        } else {
-            $is_like = "false";
-        }
-
-        $like_count = QuestionLike::where('question_id', $question_id)->count();
-
-        $data['like_count'] = $like_count;
-        $data['is_like'] = $is_like;
-
-        return $data;
-    }
+    
 }
