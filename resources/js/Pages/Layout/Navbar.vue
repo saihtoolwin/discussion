@@ -57,7 +57,7 @@
                         class="text-sm font-bold  hover:text-black md:mr-8"
                         @click="toggleDropdown"
                     >
-                        <svg
+                        <!-- <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -70,7 +70,8 @@
                                 stroke-linejoin="round"
                                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                             />
-                        </svg>
+                        </svg> -->
+                        <img :src="userImage" alt="" class="w-[50px] h-[50px]  rounded-full outline hover:outline-2 hover:outline-cyan-600">
                         <div
                             v-if="showDropdown"
                             ref="target"
@@ -105,8 +106,8 @@
         </div>
 </template>
 <script>
-import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { ref,computed} from "vue";
+import { Link,usePage } from "@inertiajs/vue3";
 import { onClickOutside } from "@vueuse/core";
 
 export default {
@@ -114,7 +115,9 @@ export default {
         const showMenu = ref(false);
         const showDropdown = ref(false);
         const target = ref(null);
-
+        const page = usePage();
+        const userImage = computed(() => page.props.auth.user.url_storage);
+        // console.log("it is from navbar"+ userImage.value)
         const toggleDropdown = () => {
             showDropdown.value = !showDropdown.value;
         };
@@ -122,12 +125,12 @@ export default {
         onClickOutside(target, () => {
             showDropdown.value = false;
         });
-
         return {
             showMenu,
             showDropdown,
             toggleDropdown,
             target,
+            userImage
         };
     },
     components: {
