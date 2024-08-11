@@ -10,7 +10,7 @@
         <!-- Side bar end -->
 
          <!-- Content -->
-        <div class="w-full min-h-[auto] ml-8 overflow-hidden  rounded-md">
+        <div class="w-full min-h-[auto] ml-8 overflow-hidden ">
             <slot></slot>
         </div>
         <!-- Content end -->

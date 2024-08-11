@@ -20,7 +20,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
     ];
+
+    protected $appends = ["url_storage"];
+
+    protected function getUrlStorageAttribute()
+    {
+        return 'storage/'.$this->image;
+    }
 
     /**
      * The attributes that should be hidden for serialization.

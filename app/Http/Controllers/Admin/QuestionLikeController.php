@@ -77,8 +77,10 @@ class QuestionLikeController extends Controller
     public function destroy(string $id,QuestionLike $questionLike)
     {
         $like = QuestionLike::where('question_id', $id)->where('user_id',Auth::id())->first();
-        // dd($id);
-        $like->delete();
+        if ($like) {
+            $like->delete();
+            // return response()->json(['message' => 'Like deleted successfully.'], 200);
+        }
         return back();
     }
 }

@@ -1,26 +1,37 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import Loading from "@/Pages/components/Loading.vue";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import FileUpload from "@/Pages/components/FileUpload.vue";
+const handleFilePondUpdate = (file) => {
+    console.log(file)
+    if (file) {
+        form.image = file;
+    }
+};
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    image: "",
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () =>{
-            form.reset('password', 'password_confirmation'),
-            toast.success(`Hi! ${form.name} Welcome to Discussion`)
-        } 
+    form.post(route("register"), {
+        onSuccess: () => {
+            form.reset("password", "password_confirmation"),
+                toast.success(`Hi! ${form.name} Welcome to Discussion`);
+        },
+        onError:()=>{
+            toast.error("Something went wrong");
+        }
     });
 };
 </script>
@@ -30,9 +41,25 @@ const submit = () => {
         <Head title="Register" />
 
         <div class="">
-            <h3 class="text-3xl  font-bold text-primary">Discussion</h3>
+            <h3 class="text-3xl font-bold text-primary">Discussion</h3>
         </div>
-        <form @submit.prevent="submit" class="mt-5">
+        <form
+            @submit.prevent="submit"
+            enctype="multipart/form-data"
+            class="mt-5"
+        >
+            <FileUpload
+                mode="avatar"
+                name="image"
+                labelIdle="Choose or Drag Avatar here..."
+                :allowMultiple="false"
+                :accepted-file-types="'image/jpg, image/png, image/jpeg'"
+                :imageCropAspectRatio="'1:1'"
+                :imagePreviewHeight="170"
+                :imageResizeTargetWidth="170"
+                :imageResizeTargetHeight="170"
+                @updateFile="handleFilePondUpdate"
+            ></FileUpload>
             <div>
                 <InputLabel for="name" value="Name" />
 
@@ -83,7 +110,10 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel
+                    for="password_confirmation"
+                    value="Confirm Password"
+                />
 
                 <TextInput
                     id="password_confirmation"
@@ -95,7 +125,10 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                <InputError
+                    class="mt-2"
+                    :message="form.errors.password_confirmation"
+                />
             </div>
 
             <div class="flex items-center justify-end mt-4">
@@ -106,8 +139,11 @@ const submit = () => {
                     Already have an account?
                 </Link>
 
-                <PrimaryButton class="ms-4 bg-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-
+                <PrimaryButton
+                    class="ms-4 bg-primary"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
                     <Loading v-if="form.processing"></Loading>
                     Register
                 </PrimaryButton>

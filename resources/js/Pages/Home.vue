@@ -102,7 +102,8 @@
                         >{{ tag.name }}</span
                     >
                 </div>
-                <Link :href="route('question.index',{slug:question.slug})"
+                <Link
+                    :href="route('question.index', { slug: question.slug })"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded ml-auto"
                 >
                     View
@@ -116,7 +117,7 @@
 // import Sidebar from "./components/Sidebar.vue";
 import Master from "./Layout/Master.vue";
 import { defineProps, ref } from "vue";
-import { router, usePage,Link } from "@inertiajs/vue3";
+import { router, usePage, Link } from "@inertiajs/vue3";
 const page = usePage();
 const red = ref(false);
 // Define props
@@ -127,24 +128,32 @@ const props = defineProps({
 const like = (id, is_like) => {
     if (is_like == "false") {
         router.post(
-        route("like.store", { question_id: id }),
-        {},
-        {
-            onSuccess: () => {
-                console.log("it is success");
-                red.value = true;
-            },
-        }
-    );
-    }else{
-        console.log(id);
-        router.delete(route('like.destroy',{like:id}),{},{
-            onSuccess:()=>{
-                console.log("it is delete");
+            route("like.store", { question_id: id }),
+            {},
+            {
+                onSuccess: () => {
+                    console.log("it is success");
+                    red.value = true;
+                },
+                preserveScroll: true,
             }
-        })
+        );
+    } else {
+        console.log(id);
+        router.delete(
+            route("like.destroy", { like: id }),
+            
+            {
+                onSuccess: () => {
+                    console.log("It is delete");
+                },
+                onError: (error) => {
+                    console.error("Error deleting like:", error);
+                },
+                preserveScroll: true,
+            }
+        );
     }
-   
 };
 </script>
 
