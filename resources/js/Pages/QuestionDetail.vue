@@ -102,29 +102,41 @@
                         >{{ tag.name }}</span
                     >
                 </div>
-                <Link @click="goBack()"
+                <button
+                    @click="goBack()"
                     class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded ml-auto"
                 >
                     Back
-                </Link>
+                </button>
             </div>
+        </div>
+        <div
+            class="w-full rounded-md shadow-md overflow-hidden"
+        >
+            <Comment :comments="comments"></Comment>
         </div>
     </Master>
 </template>
 
 <script setup>
 import Master from "@/Pages/Layout/Master.vue";
-import {defineProps} from "vue";
-import {  usePage,Link } from "@inertiajs/vue3";
+import Comment from "@/Pages/components/Comment.vue"
+import { computed, defineProps, ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
 const page = usePage();
 const props = defineProps({
-    questions : Array,
-})
-
-const goBack =()=>{
-    // console.log("Go back")
+    questions: Array,
+});
+const comments =computed(()=>page.props.questions.flatMap((question) => question.comment)) ;
+const goBack = () => {
     window.history.back();
-}
+};
+
+
+
+// const fileOpen = () => {
+    
+// };
 </script>
 
 <style lang="scss" scoped></style>
