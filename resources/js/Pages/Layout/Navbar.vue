@@ -95,6 +95,7 @@
                                     :href="route('logout')"
                                     class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                     role="menuitem"
+                                    as="button"
                                 >
                                     Sign out
                                 </Link>
@@ -116,7 +117,7 @@ export default {
         const showDropdown = ref(false);
         const target = ref(null);
         const page = usePage();
-        const userImage = computed(() => page.props.auth.user.url_storage);
+        const userImage = computed(() =>`/${page.props.auth.user.url_storage}`);
         // console.log("it is from navbar"+ userImage.value)
         const toggleDropdown = () => {
             showDropdown.value = !showDropdown.value;
