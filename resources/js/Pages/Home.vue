@@ -1,5 +1,5 @@
 <template>
-    <Master>
+    <Master class="scroll overflow-y-auto">
         <div
             class="mb-4 shadow-lg border h-auto"
             v-for="question in questions"
@@ -157,4 +157,8 @@ const like = (id, is_like) => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+body::-webkit-scrollbar {
+ display: none !important;
+}
+</style>

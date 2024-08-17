@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
 
     // question
     Route::get('/question/detail/{slug}', [QuestionController::class, 'index'])->name('question.index');
+    Route::get('/question/detail', [QuestionController::class, 'create'])->name('question.create');
+    Route::post('/question/detail', [QuestionController::class, 'store'])->name('question.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

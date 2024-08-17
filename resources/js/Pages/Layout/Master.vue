@@ -23,4 +23,9 @@ import Navbar from "./Navbar.vue";
 import Sidebar from "./Sidebar.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+
+.scroll::-webkit-scrollbar {
+ display: none !important;
+}
+</style>
