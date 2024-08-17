@@ -1,8 +1,8 @@
 <template>
     <div class="w-3/5 rounded h-full overflow-hidden shadow-lg">
-        <div class="text-white bg-primary py-4 text-xl flex justify-center">
+        <Link :href="route('question.create')" class="text-white bg-primary py-4 text-xl flex justify-center">
             Ask New Question
-        </div>
+        </Link>
         <div class="px-6 py-2 border">
             <div class="font-bold text-xl mb-2">All Tags</div>
         </div>
@@ -25,9 +25,8 @@
 </template>
 
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { usePage,Link } from "@inertiajs/vue3";
 import { computed } from "vue";
-
 const page = usePage();
 const tags = computed(() => page.props.tags);
 </script>

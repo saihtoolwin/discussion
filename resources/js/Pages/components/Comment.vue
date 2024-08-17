@@ -83,15 +83,21 @@
                 <p class="text-gray-800">
                     {{ comment.comment }}
                 </p>
-                <Modal>
-                    <img
-                        class="h-[200px] mt-5"
-                        :src="getUrlImage(comment.image)"
-                        alt=""
-                    />
-                </Modal>
+                <img
+                    @click="openModal(comment.image)"
+                    class="h-[200px] mt-5"
+                    :src="getUrlImage(comment.image)"
+                    alt=""
+                />
             </div>
         </div>
+        <Modal :show="isModalVisible" @close="isModalVisible = false">
+            <img
+                class="h-full w-full"
+                :src="getUrlImage(selectedImage)"
+                alt=""
+            />
+        </Modal>
         <!-- Inner border ends here -->
     </div>
 </template>
@@ -101,13 +107,22 @@ import FileUpload from "@/Pages/components/FileUpload.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { computed, defineProps, ref } from "vue";
 import Modal from "@/Components/Modal.vue";
-const openModal = ref(false);
+const isModalVisible = ref(false);
+const selectedImage = ref("");
+const openModal = (image) => {
+    selectedImage.value = image;
+    console.log(image);
+    isModalVisible.value = true;
+};
 const props = defineProps({
     comments: Array,
 });
 const getUrlImage = (image) => {
     return `http://127.0.0.1:8000/storage/${image}`;
 };
+// const open =()=>{
+//     openModal.value = true;
+// }
 const fileUploadref = ref(null);
 const page = usePage();
 const handleFilePondUpdate = (file) => {
