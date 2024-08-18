@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Question;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Traits\Question as QuestionTraits;
+use Illuminate\Support\Facades\Auth;
 
 use function Termwind\render;
 
@@ -62,5 +64,27 @@ class QuestionController extends Controller
         }
 
         return to_route('home.index');
+    }
+
+    public function userQuestion()
+    {
+        // $user = User::with('question.comment','question.like','question.comment')->find(Auth::id());
+        $questions= Question::where('user_id',Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
+        foreach ($questions as $question) {
+            $likeDetails = $this->getlikeDetails($question->id);
+            $question->is_like = $likeDetails['is_like'];
+            $question->like_count = $likeDetails['like_count'];
+          
+        }
+        // return response()->json(['question'=>$questions]);
+        return Inertia::render('UserQuestion',[
+            'questions' => $questions,
+        ]);
+    }
+
+    public function destory(Question $question)
+    {
+        $question->delete();
+        return back();
     }
 }
