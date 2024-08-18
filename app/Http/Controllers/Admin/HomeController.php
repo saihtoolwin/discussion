@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user', 'comment', 'like', 'questionSave', 'tag')->inRandomOrder()->get();
+        $questions = Question::with('user', 'comment', 'like', 'questionSave', 'tag')->orderBy('created_at','desc')->get();
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
