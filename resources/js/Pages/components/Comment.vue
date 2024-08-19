@@ -111,7 +111,6 @@ const isModalVisible = ref(false);
 const selectedImage = ref("");
 const openModal = (image) => {
     selectedImage.value = image;
-    console.log(image);
     isModalVisible.value = true;
 };
 const props = defineProps({
