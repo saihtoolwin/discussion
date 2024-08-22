@@ -1,5 +1,6 @@
 <template>
     <Master>
+        <Pagination :links="links"  v-if="links.length > 4"></Pagination>
         <div
             class="mb-4 shadow-lg border h-auto"
             v-for="question in questions"
@@ -141,9 +142,10 @@
 <script setup>
 // import Sidebar from "./components/Sidebar.vue";
 import Master from "./Layout/Master.vue";
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import DeleteModel from "@/Pages/components/DeleteModel.vue";
+import Pagination from "./components/Pagination.vue";
 const page = usePage();
 const red = ref(false);
 const model = ref(false);
@@ -154,9 +156,10 @@ const openModal = (id) => {
 };
 // Define props
 const props = defineProps({
-    questions: Array,
+    questions: Object,
 });
-
+const questions = computed(() => props.questions.data);
+const links = computed(() => props.questions.links);
 const like = (id, is_like) => {
     if (is_like == "false") {
         router.post(

@@ -1,5 +1,6 @@
 <template>
     <Master class="scroll overflow-y-auto">
+        <Pagination :links="links" v-if="links.length > 4"></Pagination>
         <div
             class="mb-4 shadow-lg border h-auto"
             v-for="question in questions"
@@ -35,8 +36,8 @@
                         Fixed
                     </span>
                     <span
-                        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white"
-                    >
+                     @click="openModal(question.id)"
+                     class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white cursor-pointer"                    >
                         Delete
                     </span>
                 </div>
@@ -110,21 +111,53 @@
                 </Link>
             </div>
         </div>
+        <DeleteModel :show="model" :id="selectedId" @close="model = false">
+            <div class="flex flex-col items-center justify-center text-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="red"
+                    class="mx-auto mt-5"
+                    width="100px"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                <p class="text-2xl font-medium text-black my-5">
+                    Delete Question
+                </p>
+                <p class="text-xl font-medium text-black mb-4">
+                    Are you sure you would like to do this ?
+                </p>
+            </div>
+        </DeleteModel>
     </Master>
 </template>
 
 <script setup>
 // import Sidebar from "./components/Sidebar.vue";
 import Master from "./Layout/Master.vue";
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
+import DeleteModel from "@/Pages/components/DeleteModel.vue";
+import Pagination from "./components/Pagination.vue";
 const page = usePage();
 const red = ref(false);
-// Define props
+const model = ref(false);
+const selectedId = ref(null);
+const openModal = (id) => {
+    selectedId.value=id;
+    model.value = true;
+};
 const props = defineProps({
-    questions: Array,
+    questions: Object,
 });
-
+const questions =computed(()=> props.questions.data);
+const links = props.questions.links;
+console.log(links)
 const like = (id, is_like) => {
     if (is_like == "false") {
         router.post(

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Question;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,30 +14,31 @@ class QuestionSeeder extends Seeder
      */
     public function run(): void
     {
+        Question::factory()->count(10)->create();
         $questions = [
             [
-                'user_id' => 1, 
+                'user_id' => 11, 
                 'title' => 'How to learn Laravel?',
                 'slug' => Str::slug('How to learn Laravel?'),
                 'description' => 'I want to learn Laravel. What are the best resources to start with?',
                 'is_fixed' => 'false',
             ],
             [
-                'user_id' => 2, 
+                'user_id' => 11, 
                 'title' => 'Best practices for Vue.js?',
                 'slug' => Str::slug('Best practices for Vue.js?'),
                 'description' => 'Can someone share the best practices for developing applications with Vue.js?',
                 'is_fixed' => 'false',
             ],
             [
-                'user_id' => 1, 
+                'user_id' => 11, 
                 'title' => 'Understanding RESTful APIs',
                 'slug' => Str::slug('Understanding RESTful APIs'),
                 'description' => 'What are RESTful APIs and how do they work?',
                 'is_fixed' => 'false',
             ],
             [
-                'user_id' => 3, 
+                'user_id' => 11, 
                 'title' => 'Tips for optimizing SQL queries',
                 'slug' => Str::slug('Tips for optimizing SQL queries'),
                 'description' => 'How can I optimize my SQL queries for better performance?',
