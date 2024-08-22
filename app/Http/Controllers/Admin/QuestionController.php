@@ -18,7 +18,7 @@ class QuestionController extends Controller
     use QuestionTraits;
     public function index($slug)
     {
-        $questions = Question::where('slug',$slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
+        $questions = Question::where('slug',$slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
@@ -69,7 +69,7 @@ class QuestionController extends Controller
     public function userQuestion()
     {
         // $user = User::with('question.comment','question.like','question.comment')->find(Auth::id());
-        $questions= Question::where('user_id',Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
+        $questions= Question::where('user_id',Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
