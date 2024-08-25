@@ -18,14 +18,13 @@ class QuestionController extends Controller
     use QuestionTraits;
     public function index($slug)
     {
-        $questions = Question::where('slug',$slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
+        $questions = Question::where('slug',$slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
         }
         // return response()->json(['question'=>$questions]);
-
         return Inertia::render('QuestionDetail', [
             'questions' => $questions,
         ]);
@@ -45,7 +44,7 @@ class QuestionController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'question' => 'required|string',
-            'tags' => 'array', 
+            'tags' => 'array|required', 
             'tags.*' => 'integer|exists:tags,id',
         ]);
     

@@ -22,7 +22,6 @@ const props=defineProps({
     links:Array,
 })
 const links = props.links;
-console.log(links);
 </script>
 
 <style scoped>

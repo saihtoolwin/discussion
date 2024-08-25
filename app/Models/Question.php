@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +15,16 @@ class Question extends Model
         'description',
         'is_fixed',
     ];
+
+    public function scopeFilterBy(Builder $query,?string $tag ): Builder
+    {
+        // dd($tag);
+        return $query->when(isset($tag),function($query) use ($tag){
+            $query->whereHas('tag',function($query) use ($tag){
+                $query->where('slug',$tag);
+            });
+        });
+    }
 
     public function user()
     {
