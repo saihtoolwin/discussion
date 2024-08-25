@@ -42,7 +42,7 @@
                 </div>
                 <div class="flex justify-end">
                     <button
-                        class="w-20 h-8 bg-gray-500 rounded-sm hover:bg-gray-700 text-white mx-3"
+                        class="w-20 h-8 bg-gray-600 rounded-sm hover:bg-gray-700 text-white mx-3"
                     >
                         Cancel
                     </button>
@@ -52,7 +52,7 @@
                         :disabled="form.processing"
                     >
                         <Loading v-if="form.processing"></Loading>
-                        Ask
+                        <span :class="{ 'hidden': form.processing }">Ask</span>
                     </button>
                 </div>
             </form>
@@ -68,10 +68,10 @@ import Loading from "@/Pages/components/Loading.vue";
 // import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
+import { toast } from 'vue3-toastify';
 const props = defineProps({
     tags: Object,
 });
-console.log(props.tags);
 const form = useForm({
     title : '',
     tags:[],
@@ -80,7 +80,10 @@ const form = useForm({
 const submit = () =>{
     form.post(route('question.store'),{
         onSuccess:()=>{
-            console.log("it is Success!");
+            toast.success('Created New Question!');
+        },
+        onError:()=>{
+            toast.error("Failed to create new Question!")
         }
     })
 }
