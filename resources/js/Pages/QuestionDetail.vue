@@ -30,13 +30,15 @@
                     v-show="question.user_id == page.props.auth.user.id"
                 >
                     <span
-                        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-yellow-500 text-white"
+                        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-yellow-500 text-white cursor-pointer"
+                       :class="{ 'hidden': question.is_fixed == 'true' }"
+                        @click="fix(question.id)"
                     >
                         Fixed
                     </span>
                     <span
-                        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white"
-                    >
+                     @click="openModal(question.id)"
+                     class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white cursor-pointer"                    >
                         Delete
                     </span>
                 </div>
@@ -122,7 +124,9 @@
 import Master from "@/Pages/Layout/Master.vue";
 import Comment from "@/Pages/components/Comment.vue"
 import { computed, defineProps, ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 const page = usePage();
 const props = defineProps({
     questions: Array,
@@ -132,7 +136,14 @@ const goBack = () => {
     window.history.back();
 };
 
-
+const fix=(id)=>{
+    // console.log(id)
+    router.post(route('question.update'),{id :id},{
+        onSuccess:()=>{
+            toast.success('Question updated successfully!');
+        }
+    })
+}
 
 // const fileOpen = () => {
     

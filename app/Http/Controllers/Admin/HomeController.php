@@ -17,20 +17,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $subscriptions = Subscription::filterBy(request(['search', 'name', 'email', 'plan', 'status', 'payment', 'period']))
-        // ->sortBy(request('sort', 'id'), request('direction', 'desc'))
-        // ->with('user', 'plan', 'price')
-        // ->paginate(request('per_page', 10))
-        // ->withQueryString();
-        // $questions = Question::with('user', 'comment', 'like', 'questionSave', 'tag')->orderBy('created_at','desc')->paginate(5);
-        $questions=Question::filterBy(request('tag'))
+        $questions=Question::filterBy(request('tag'),request('type'))
         ->with('user', 'comment', 'like', 'questionSave', 'tag')
         ->orderBy('created_at','desc')->paginate(5);
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
-            // $question->image = url_storage;
         }
         // return response()->json($questions);
 
