@@ -32,6 +32,7 @@
                 >
                     <span
                         class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-yellow-500 text-white cursor-pointer"
+                       :class="{ 'hidden': question.is_fixed == 'true' }"
                         @click="fix(question.id)"
                     >
                         Fixed
@@ -145,6 +146,8 @@ import { computed, defineProps, ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import DeleteModel from "@/Pages/components/DeleteModel.vue";
 import Pagination from "./components/Pagination.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 const page = usePage();
 const red = ref(false);
 const model = ref(false);
@@ -189,7 +192,11 @@ const like = (id, is_like) => {
 };
 
 const fix=(id)=>{
-    console.log(id)
+    router.post(route('question.update',{id:id}),{},{
+        onSuccess:()=>{
+            toast.success('Question updated successfully!');
+        }
+    })
 }
 </script>
 

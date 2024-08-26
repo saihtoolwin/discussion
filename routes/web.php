@@ -33,7 +33,8 @@ Route::middleware('auth')->group(function () {
     // question
     Route::get('/question/detail/{slug}', [QuestionController::class, 'index'])->name('question.index');
     Route::get('/question/detail', [QuestionController::class, 'create'])->name('question.create');
-    Route::post('/question/detail', [QuestionController::class, 'store'])->name('question.store');
+    Route::post('/question', [QuestionController::class, 'store'])->name('question.store');
+    Route::post('/question/{id}', [QuestionController::class, 'update'])->name('question.update');
     Route::delete('/question/{question}', [QuestionController::class, 'destory'])->name('question.delete');
     Route::get('/question/user-question', [QuestionController::class, 'userQuestion'])->name('question.user');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -18,7 +18,7 @@ class QuestionController extends Controller
     use QuestionTraits;
     public function index($slug)
     {
-        $questions = Question::where('slug',$slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
+        $questions = Question::where('slug', $slug)->with('user', 'comment.user', 'like', 'questionSave', 'tag')->get();
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
@@ -32,22 +32,22 @@ class QuestionController extends Controller
 
     public function create()
     {
-        $tags=Tag::all();
-        return Inertia::render('CreateQuestion',[
+        $tags = Tag::all();
+        return Inertia::render('CreateQuestion', [
             'tags' => $tags,
         ]);
     }
 
-    public function store(Request $request,Question $question)
+    public function store(Request $request, Question $question)
     {
         // dd($request->all());
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'question' => 'required|string',
-            'tags' => 'array|required', 
+            'tags' => 'array|required',
             'tags.*' => 'integer|exists:tags,id',
         ]);
-    
+
         $question = Question::create([
             'title' => $validatedData['title'],
             'slug' => \Str::slug($validatedData['title']),
@@ -55,9 +55,8 @@ class QuestionController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        if($validatedData['tags'])
-        {
-            $tags=Tag::whereIn('id',$validatedData['tags'])->pluck('id');
+        if ($validatedData['tags']) {
+            $tags = Tag::whereIn('id', $validatedData['tags'])->pluck('id');
             // dd($tags);
             $question->tag()->attach($tags);
         }
@@ -65,18 +64,26 @@ class QuestionController extends Controller
         return to_route('home.index');
     }
 
+    public function update(Question $question, Request $request)
+    {
+        $question = $question->find($request->id);
+        $question->update([
+            'is_fixed' => 'true',
+        ]);
+        return back();
+    }
+
     public function userQuestion()
     {
         // $user = User::with('question.comment','question.like','question.comment')->find(Auth::id());
-        $questions= Question::where('user_id',Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
+        $questions = Question::where('user_id', Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
-          
         }
         // return response()->json(['question'=>$questions]);
-        return Inertia::render('UserQuestion',[
+        return Inertia::render('UserQuestion', [
             'questions' => $questions,
         ]);
     }
