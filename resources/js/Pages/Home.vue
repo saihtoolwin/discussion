@@ -85,6 +85,7 @@
                 &nbsp; &nbsp;
                 <svg
                     class="size-6 text-primary"
+                    @click="saveQuestion(question.id)"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -197,6 +198,10 @@ const fix=(id)=>{
             toast.success('Question updated successfully!');
         }
     })
+}
+const saveQuestion=(id)=>{
+    console.log(id)
+    router.post(route('question.save',{id:id}))
 }
 </script>
 
