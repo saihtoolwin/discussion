@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use App\Models\SaveQuestion;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -92,5 +93,25 @@ class QuestionController extends Controller
     {
         $question->delete();
         return back();
+    }
+
+    public function showQuestion()
+    {
+        $questions= SaveQuestion::where('user_id',Auth()->id())->with('questions')->get();
+        // return $questions;
+        return inertia('SaveQuestion',[
+            'questions' => $questions,
+        ]);
+    }
+
+    public function saveQuestion($id,SaveQuestion $saveQuestion)
+    {
+        // dd("hello");
+        $saveQuestion->create([
+            'user_id' => Auth()->id(),
+            'question_id' => $id,
+        ]);
+        return back();
+        
     }
 }

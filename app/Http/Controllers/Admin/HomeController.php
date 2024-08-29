@@ -19,7 +19,7 @@ class HomeController extends Controller
     {
         $questions=Question::filterBy(request('tag'),request('type'))
         ->with('user', 'comment', 'like', 'questionSave', 'tag')
-        ->orderBy('created_at','desc')->paginate(5);
+        ->orderBy('created_at','desc')->paginate(5)->withQueryString();
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
