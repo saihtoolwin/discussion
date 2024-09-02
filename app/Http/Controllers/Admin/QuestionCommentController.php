@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PostOwnerMail;
+use App\Models\Question;
 use App\Models\QuestionComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class QuestionCommentController extends Controller
 {
@@ -38,18 +41,28 @@ class QuestionCommentController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg|max:1500',
             'comment' => 'required|string|max:1000',
         ]);
-    
-        
+
+
         if ($request->hasFile('image')) {
             $time = time();
             $originalName = $request->file('image')->getClientOriginalName();
-            $file_name=$time.'_'.$originalName;
+            $file_name = $time . '_' . $originalName;
             $filePath = $request->file('image')->storeAs('images', $file_name);
             $data['image'] = $filePath;
         }
 
         $data['user_id'] = Auth::id();
-        // dd($data);
+        // dd($data['question_id']);
+        $question = Question::with('user')->find($data['question_id']);
+
+        
+        if ($question && $question->user) {
+            $owner_post = $question->user->id;
+            if ($owner_post !== auth()->id()) {
+                Mail::to($question->user->email)->queue(new PostOwnerMail($question));
+            }
+        }
+        // $comment = $data['user_id'] != 
         $questionComment->create($data);
 
         return back();
