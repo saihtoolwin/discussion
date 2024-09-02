@@ -25,6 +25,7 @@ class QuestionController extends Controller
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
         }
+        // dd("Helo");
         // return response()->json(['question'=>$questions]);
         return Inertia::render('QuestionDetail', [
             'questions' => $questions,
@@ -113,5 +114,10 @@ class QuestionController extends Controller
         ]);
         return back();
         
+    }
+
+    public function deleteSaveQuestion($id,SaveQuestion $saveQuestion)
+    {
+        dd($id);
     }
 }

@@ -17,7 +17,8 @@ use Inertia\Inertia;
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
-
+Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 Route::resource('home', HomeController::class)->middleware(['auth', 'verified']);
 Route::get('/', [HomeController::class, 'index'])
     ->name('home.index')
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/question/{question}', [QuestionController::class, 'destory'])->name('question.delete');
     Route::get('/question/user-question', [QuestionController::class, 'userQuestion'])->name('question.user');
     Route::post('/question/save-question/{id}', [QuestionController::class, 'saveQuestion'])->name('question.save');
+    Route::post('/question/save-question/{id}', [QuestionController::class, 'deleteSaveQuestion'])->name('question.unsave');
 
     Route::get('/question/save-question', [QuestionController::class, 'showQuestion'])->name('question.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

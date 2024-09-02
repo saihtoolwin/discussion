@@ -1,6 +1,9 @@
 <template>
     <Master class="scroll overflow-y-auto">
-        <Pagination :links="links" v-if="links.length > 4 && page.component =='Home' "></Pagination>
+        <Pagination
+            :links="links"
+            v-if="links.length > 4 && page.component == 'Home'"
+        ></Pagination>
         <div
             class="mb-4 shadow-lg border h-auto"
             v-for="question in questions"
@@ -32,14 +35,15 @@
                 >
                     <span
                         class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-yellow-500 text-white cursor-pointer"
-                       :class="{ 'hidden': question.is_fixed == 'true' }"
+                        :class="{ hidden: question.is_fixed == 'true' }"
                         @click="fix(question.id)"
                     >
                         Fixed
                     </span>
                     <span
-                     @click="openModal(question.id)"
-                     class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white cursor-pointer"                    >
+                        @click="openModal(question.id)"
+                        class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded text-xs font-medium bg-red-500 text-white cursor-pointer"
+                    >
                         Delete
                     </span>
                 </div>
@@ -87,6 +91,11 @@
                     class="size-6 text-primary"
                     @click="saveQuestion(question.id)"
                     xmlns="http://www.w3.org/2000/svg"
+                    :class="{
+                        'fill-primary': question.question_save.some(
+                            (qs) => qs.question_id == question.id
+                        ),
+                    }"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
@@ -106,7 +115,8 @@
                         >{{ tag.name }}</span
                     >
                 </div>
-                <Link as="button"
+                <Link
+                    as="button"
                     :href="route('question.index', { slug: question.slug })"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded ml-auto"
                 >
@@ -147,20 +157,20 @@ import { computed, defineProps, ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import DeleteModel from "@/Pages/components/DeleteModel.vue";
 import Pagination from "./components/Pagination.vue";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const page = usePage();
 const red = ref(false);
 const model = ref(false);
 const selectedId = ref(null);
 const openModal = (id) => {
-    selectedId.value=id;
+    selectedId.value = id;
     model.value = true;
 };
 const props = defineProps({
     questions: Object,
 });
-const questions =computed(()=> props.questions.data);
+const questions = computed(() => props.questions.data);
 const links = props.questions.links;
 const like = (id, is_like) => {
     if (is_like == "false") {
@@ -178,7 +188,7 @@ const like = (id, is_like) => {
     } else {
         router.delete(
             route("like.destroy", { like: id }),
-            
+
             {
                 onSuccess: () => {
                     console.log("It is delete");
@@ -192,21 +202,34 @@ const like = (id, is_like) => {
     }
 };
 
-const fix=(id)=>{
-    router.post(route('question.update',{id:id}),{},{
-        onSuccess:()=>{
-            toast.success('Question updated successfully!');
+const fix = (id) => {
+    router.post(
+        route("question.update", { id: id }),
+        {},
+        {
+            onSuccess: () => {
+                toast.success("Question updated successfully!");
+            },
         }
-    })
+    );
+};
+const saveQuestion = (id) => {
+    console.log(id);
+    const isSaved = question.question_save.some(
+        (qs) => qs.question_id == id
+    );
+    if(isSaved)
+{
+    router.post(route("question.save", { id: id }));
+
+}else{
+     router.post(route("question.unsave", { id: id }));
 }
-const saveQuestion=(id)=>{
-    console.log(id)
-    router.post(route('question.save',{id:id}))
-}
+};
 </script>
 
 <style>
 body::-webkit-scrollbar {
- display: none !important;
+    display: none !important;
 }
 </style>

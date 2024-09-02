@@ -90,9 +90,10 @@
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
                         />
                     </svg>
+
                     <li>Save Questions</li>
                 </ul>
             </Link>
@@ -106,7 +107,7 @@ import { computed } from "vue";
 const page = usePage();
 const tags = computed(() => page.props.tags);
 const editPage = computed(() => {
-    return page.component === "EditUser" || page.component === "UserQuestion";
+    return page.component === "EditUser" || page.component === "UserQuestion" || page.component==="SaveQuestion";
 });
 </script>
 
