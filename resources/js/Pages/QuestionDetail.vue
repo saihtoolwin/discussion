@@ -84,7 +84,11 @@
                 &nbsp; &nbsp;
                 <svg
                     class="size-6 text-primary"
+                    @click="saveQuestion(question.id,question.save_question)"
                     xmlns="http://www.w3.org/2000/svg"
+                    :class="{
+                        'fill-primary': question.save_question == 'true',
+                    }"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="1.5"
@@ -117,6 +121,29 @@
         >
             <Comment :comments="comments"></Comment>
         </div>
+        <DeleteModel :show="model" :id="selectedId" @close="model = false">
+            <div class="flex flex-col items-center justify-center text-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="red"
+                    class="mx-auto mt-5"
+                    width="100px"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                <p class="text-2xl font-medium text-black my-5">
+                    Delete Question
+                </p>
+                <p class="text-xl font-medium text-black mb-4">
+                    Are you sure you would like to do this ?
+                </p>
+            </div>
+        </DeleteModel>
     </Master>
 </template>
 
@@ -127,15 +154,21 @@ import { computed, defineProps, ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import DeleteModel from "@/Pages/components/DeleteModel.vue";
 const page = usePage();
 const props = defineProps({
     questions: Array,
 });
+const model = ref(false);
 const comments =computed(()=>page.props.questions.flatMap((question) => question.comment)) ;
 const goBack = () => {
     window.history.back();
 };
-
+const selectedId = ref(null);
+const openModal = (id) => {
+    selectedId.value = id;
+    model.value = true;
+};
 const fix=(id)=>{
     // console.log(id)
     router.post(route('question.update'),{id :id},{
@@ -145,9 +178,34 @@ const fix=(id)=>{
     })
 }
 
-// const fileOpen = () => {
-    
-// };
+const saveQuestion = (id,save_question) => {
+    console.log(save_question)
+    if (save_question == "false") {
+        router.post(
+            route("question.save", { id: id }),
+            {},
+            {
+                onSuccess: () => {
+                    console.log("it is success");
+                },
+                preserveScroll: true,
+            }
+        );
+    } else {
+        router.delete(
+            route("question.unsave", { id: id }),
+            {
+                onSuccess: () => {
+                    console.log("It is delete");
+                },
+                onError: (error) => {
+                    console.error("Error deleting like:", error);
+                },
+                preserveScroll: true,
+            }
+        );
+    }
+};
 </script>
 
 <style lang="scss" scoped></style>
