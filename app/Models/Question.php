@@ -19,19 +19,17 @@ class Question extends Model
 
     public function scopeFilterBy(Builder $query, ?string $tag, ?string $type): Builder
     {
-        // dd($type);
         if ($type === 'answer') {
             $type = 'true';
         } elseif ($type === 'unanswer') {
             $type = 'false';
-            // dd($type);
         }
        
         return $query->when(isset($tag), function ($query) use ($tag) {
             $query->whereHas('tag', function ($query) use ($tag) {
                 $query->where('slug', $tag);
             });
-        })->when(isset($type), function ($query) use ($type) {
+        })->when($type, function ($query) use ($type) {
             $query->where('is_fixed', $type)
                 ->when($type === 'true', function ($query) {
                     $query->whereHas('comment');

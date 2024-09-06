@@ -16,11 +16,13 @@
         <!-- Content end -->
     </div>
     <!-- Main Content end -->
+     <FlashMessages></FlashMessages>
 </template>
 
 <script setup>
 import Navbar from "./Navbar.vue";
 import Sidebar from "./Sidebar.vue";
+import FlashMessages from "../Global/FlashMessages.vue";
 </script>
 
 <style scoped>

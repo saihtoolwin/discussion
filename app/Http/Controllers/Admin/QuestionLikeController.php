@@ -30,7 +30,6 @@ class QuestionLikeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->validate([
             'question_id' => 'required|integer|exists:questions,id',
         ]);
@@ -39,11 +38,6 @@ class QuestionLikeController extends Controller
             'question_id' => $data['question_id'],
             'user_id' => Auth::user()->id,
         ]);
-    
-        // $questionLike->store([
-        //     'question_id' => $request->id,
-        //     'user_id' => Auth::user()->id,
-        // ]);
         return back();
     }
 
@@ -71,15 +65,11 @@ class QuestionLikeController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id,QuestionLike $questionLike)
     {
         $like = QuestionLike::where('question_id', $id)->where('user_id',Auth::id())->first();
         if ($like) {
             $like->delete();
-            // return response()->json(['message' => 'Like deleted successfully.'], 200);
         }
         return back();
     }

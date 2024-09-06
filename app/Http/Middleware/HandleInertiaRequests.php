@@ -37,6 +37,13 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'tags' =>Tag::all(),
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'info' => $request->session()->get('info'),
+                'error' => $request->session()->get('error'),
+                'showToast' => $request->session()->get('showToast'),
+                'status' => $request->session()->get('status'),
+            ],
         ];
     }
 }

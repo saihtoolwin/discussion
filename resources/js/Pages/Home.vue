@@ -89,12 +89,10 @@
                 &nbsp; &nbsp;
                 <svg
                     class="size-6 text-primary"
-                    @click="saveQuestion(question.id)"
+                    @click="saveQuestion(question.id,question.save_question)"
                     xmlns="http://www.w3.org/2000/svg"
                     :class="{
-                        'fill-primary': question.question_save.some(
-                            (qs) => qs.question_id == question.id
-                        ),
+                        'fill-primary': question.save_question == 'true',
                     }"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -151,7 +149,6 @@
 </template>
 
 <script setup>
-// import Sidebar from "./components/Sidebar.vue";
 import Master from "./Layout/Master.vue";
 import { computed, defineProps, ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
@@ -172,6 +169,7 @@ const props = defineProps({
 });
 const questions = computed(() => props.questions.data);
 const links = props.questions.links;
+
 const like = (id, is_like) => {
     if (is_like == "false") {
         router.post(
@@ -213,18 +211,33 @@ const fix = (id) => {
         }
     );
 };
-const saveQuestion = (id) => {
-    console.log(id);
-    const isSaved = question.question_save.some(
-        (qs) => qs.question_id == id
-    );
-    if(isSaved)
-{
-    router.post(route("question.save", { id: id }));
-
-}else{
-     router.post(route("question.unsave", { id: id }));
-}
+const saveQuestion = (id,save_question) => {
+    console.log(save_question)
+    if (save_question == "false") {
+        router.post(
+            route("question.save", { id: id }),
+            {},
+            {
+                onSuccess: () => {
+                    console.log("it is success");
+                },
+                preserveScroll: true,
+            }
+        );
+    } else {
+        router.delete(
+            route("question.unsave", { id: id }),
+            {
+                onSuccess: () => {
+                    console.log("It is delete");
+                },
+                onError: (error) => {
+                    console.error("Error deleting like:", error);
+                },
+                preserveScroll: true,
+            }
+        );
+    }
 };
 </script>
 
