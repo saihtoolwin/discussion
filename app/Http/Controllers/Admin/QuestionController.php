@@ -24,9 +24,8 @@ class QuestionController extends Controller
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
+            $question->save_question=$likeDetails['save_quesiton'];
         }
-        // dd("Helo");
-        // return response()->json(['question'=>$questions]);
         return Inertia::render('QuestionDetail', [
             'questions' => $questions,
         ]);
@@ -76,14 +75,13 @@ class QuestionController extends Controller
 
     public function userQuestion()
     {
-        // $user = User::with('question.comment','question.like','question.comment')->find(Auth::id());
         $questions = Question::where('user_id', Auth::id())->with('user', 'comment.user', 'like', 'questionSave', 'tag')->paginate(5);
         foreach ($questions as $question) {
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
+            $question->save_question=$likeDetails['save_quesiton'];
         }
-        // return response()->json(['question'=>$questions]);
         return Inertia::render('UserQuestion', [
             'questions' => $questions,
         ]);
@@ -92,14 +90,12 @@ class QuestionController extends Controller
     public function destory(Question $question)
     {
         $question->delete();
-        return back();
+        return to_route('home.index');
     }
 
     public function showQuestion()
     {
         $questions= SaveQuestion::where('user_id',Auth()->id())->with('questions')->get();
-        // return $questions;
-        // return response()->json($questions);
         return inertia('SaveQuestion',[
             'questions' => $questions,
         ]);
