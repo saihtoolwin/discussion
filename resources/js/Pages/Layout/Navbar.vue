@@ -76,20 +76,20 @@
                         <div class="py-1 rounded-md shadow-xs">
                             <Link
                                 :href="route('profile.edit')"
-                                class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                class="w-full block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                                 >Your Profile</Link
                             >
                             <a
                                 href="#"
-                                class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                class="w-full block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                                 >Settings</a
                             >
                             <Link
                                 method="post"
                                 :href="route('logout')"
-                                class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                class="text-left w-full block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                                 as="button"
                             >

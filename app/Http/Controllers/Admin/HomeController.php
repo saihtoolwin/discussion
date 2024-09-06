@@ -24,6 +24,7 @@ class HomeController extends Controller
             $likeDetails = $this->getlikeDetails($question->id);
             $question->is_like = $likeDetails['is_like'];
             $question->like_count = $likeDetails['like_count'];
+            $question->save_question=$likeDetails['save_quesiton'];
         }
         // return response()->json($questions);
 

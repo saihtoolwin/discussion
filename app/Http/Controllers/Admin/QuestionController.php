@@ -59,7 +59,6 @@ class QuestionController extends Controller
 
         if ($validatedData['tags']) {
             $tags = Tag::whereIn('id', $validatedData['tags'])->pluck('id');
-            // dd($tags);
             $question->tag()->attach($tags);
         }
 
@@ -100,24 +99,11 @@ class QuestionController extends Controller
     {
         $questions= SaveQuestion::where('user_id',Auth()->id())->with('questions')->get();
         // return $questions;
+        // return response()->json($questions);
         return inertia('SaveQuestion',[
             'questions' => $questions,
         ]);
     }
 
-    public function saveQuestion($id,SaveQuestion $saveQuestion)
-    {
-        // dd("hello");
-        $saveQuestion->create([
-            'user_id' => Auth()->id(),
-            'question_id' => $id,
-        ]);
-        return back();
-        
-    }
-
-    public function deleteSaveQuestion($id,SaveQuestion $saveQuestion)
-    {
-        dd($id);
-    }
+   
 }

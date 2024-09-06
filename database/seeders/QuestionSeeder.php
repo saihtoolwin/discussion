@@ -14,7 +14,7 @@ class QuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        Question::factory()->count(10)->create();
+        Question::factory()->count(30)->create();
         $questions = [
             [
                 'user_id' => 11, 

@@ -27,7 +27,8 @@ class GoogleLoginController extends Controller
 
         Auth::login($user);
         // toast.success("Welcome Back!");
-        session()->flash('success', 'Welcome Back!');
+        session()->flash('showToast', true);
+        session()->flash('success', 'Hello!');
         return to_route('home.index');
     }
 }
